@@ -8,5 +8,6 @@ elvish build.elv [-plugins example,foo,bar]
 
 ## Testing.
 ```
-./target/elvish examples/greeting.elv
+$ cp target/example.so ~/.elvish/lib/example.so
+$ ./target/elvish examples/greeting.elv
 ```

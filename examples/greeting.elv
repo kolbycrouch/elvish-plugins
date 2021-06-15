@@ -1,3 +1,3 @@
-use ./target/example
+use example
 
 echo (example:greeting)
