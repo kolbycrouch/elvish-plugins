@@ -1,0 +1,6 @@
+[submodule "elvish"]
+	path = elvish
+	url = https://github.com/kolbycrouch/elvish
+[submodule "elvish-libs"]
+	path = elvish-libs
+	url = https://github.com/kolbycrouch/elvish-libs
