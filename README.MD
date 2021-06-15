@@ -3,7 +3,7 @@
 ## Building.
 
 ```
-elvish build.elv [-plugins example,foo,bar]
+$ elvish build.elv [-plugins example,foo,bar]
 ```
 
 ## Testing.
