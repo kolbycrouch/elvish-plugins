@@ -3,4 +3,4 @@
 	url = https://github.com/kolbycrouch/elvish-libs
 [submodule "elvish"]
 	path = elvish
-	url = https://github.com/kolbycrouch/elvish
+	url = https://github.com/elves/elvish
