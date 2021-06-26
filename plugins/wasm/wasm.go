@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"src.elv.sh/pkg/eval"
 	wasmer "github.com/wasmerio/wasmer-go/wasmer"
@@ -25,8 +26,11 @@ func getFuncWrap(inst *wasmer.Instance, name string) wasmer.NativeFunction {
 }
 
 func callWrap(name wasmer.NativeFunction, args ...interface{}) interface{} {
-  res, _ := name(args)
-  return res
+  res, err := name(args...)
+  if err != nil {
+    return err
+  }
+  return fmt.Sprint(res)
 }
 
 var Ns = eval.NsBuilder{}.AddGoFns("wasm:", map[string]interface{}{

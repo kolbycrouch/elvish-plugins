@@ -56,7 +56,7 @@ fn -target-dir {
 
 fn -build-elvish {
   cd elvish/cmd/elvish
-  go build -ldflags '-w -s' -o ../../../target/elvish
+  go build -trimpath -ldflags '-w -s' -o ../../../target/elvish
   cd ../../../
 }
 
@@ -78,7 +78,7 @@ fn -build-plugins {
     if (or (eq $i 'wasm') (eq $opts[plugins] 'all')) {
       go get github.com/wasmerio/wasmer-go/wasmer
     }
-    go build -buildmode=plugin -ldflags '-w -s' -o ../target/$i.so pkg/eval/mods/$i/$i.go
+    go build -trimpath -buildmode=plugin -ldflags '-w -s' -o ../target/$i.so pkg/eval/mods/$i/$i.go
   }
   cd ../
 }

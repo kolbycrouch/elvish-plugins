@@ -1,18 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-        "io"
-        "encoding/hex"
-        "crypto/sha256"
 	"src.elv.sh/pkg/eval"
 	"src.elv.sh/pkg/eval/vals"
-	"src.elv.sh/pkg/strutil"
 )
 
 // IntPath returns the path of the interpreter as a string.
@@ -30,7 +24,7 @@ func ScriptPath(fm *eval.Frame) string {
    }
 }
 
-// cmdRun takes a command name `cmd` and optional list of strings `args`
+// proc:run takes a command name `cmd` and optional list of strings `args`
 // and produces a map with the following types/values:
 //
 //   &exitcode= num
@@ -53,7 +47,16 @@ func ScriptPath(fm *eval.Frame) string {
 //   stdin: stdin of `cmd`.
 //   stdout: stdout of `cmd`.
 //
-func cmdRun(fm *eval.Frame, cmd string, args ...string) vals.Map {
+// proc:run also has 2 optional arguments: `&stdout` and `stderr`.
+// Both can take a string in the form of a path to use as a file to output to.
+type cmdRunOpts struct {
+  Stderr string
+  Stdout string
+}
+
+func (opts *cmdRunOpts) SetDefaultOptions() {}
+
+func cmdRun(fm *eval.Frame, opts cmdRunOpts, cmd string, args ...string) vals.Map {
   var outs, errs strings.Builder
   ins := new(bytes.Buffer)
   infile := fm.InputFile()
@@ -62,8 +65,20 @@ func cmdRun(fm *eval.Frame, cmd string, args ...string) vals.Map {
   }
   proc := exec.Command(cmd, args...)
   proc.Stdin = infile
-  proc.Stdout = &outs
-  proc.Stderr = &errs
+  if opts.Stderr == "" {
+    proc.Stderr = &errs
+  } else {
+    f, _ := os.Create(opts.Stderr)
+    proc.Stderr = f
+  }
+  if opts.Stdout == "" {
+    proc.Stdout = &outs
+  } else if opts.Stdout != "" && (opts.Stdout == opts.Stderr) {
+    proc.Stdout = proc.Stderr
+  } else {
+    f, _ := os.Create(opts.Stdout)
+    proc.Stdout = f
+  }
   proc.Start()
   proc.Wait()
   m := vals.EmptyMap
