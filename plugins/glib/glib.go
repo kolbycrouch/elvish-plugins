@@ -31,10 +31,10 @@ func listDataToTreePath(fm *eval.Frame, lst *glib.List) *gtk.TreePath {
 }
 
 func valueGetString(fm *eval.Frame, val *glib.Value) {
-	out := fm.OutputChan()
+	out := fm.ValueOutput()
 
 	s, _ := val.GetString()
-	out <- s
+	out.Put(s)
 }
 
 var Ns = eval.NsBuilder{

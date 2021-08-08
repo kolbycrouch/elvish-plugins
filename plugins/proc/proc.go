@@ -13,20 +13,20 @@ import (
 
 // IntPath returns the path of the interpreter as a string.
 func IntPath(fm *eval.Frame) error {
-	out := fm.OutputChan()
+	out := fm.ValueOutput()
 	ex, err := os.Executable()
 	if err != nil {
 		return err
 	}
-	out <- ex
+	out.Put(ex)
 	return nil
 }
 
 // ScriptPath returns the path of the script as a string.
 func ScriptPath(fm *eval.Frame) error {
-	out := fm.OutputChan()
+	out := fm.ValueOutput()
 	if len(os.Args) > 1 {
-		out <- os.Args[1]
+		out.Put(os.Args[1])
 		return nil
 	}
 	return errors.New("script-path not called from script.")
@@ -66,7 +66,7 @@ type cmdRunOpts struct {
 func (opts *cmdRunOpts) SetDefaultOptions() {}
 
 func cmdRun(fm *eval.Frame, opts cmdRunOpts, cmd string, args ...string) error {
-	out := fm.OutputChan()
+	out := fm.ValueOutput()
 	var stdout, errs strings.Builder
 	ins := new(bytes.Buffer)
 	infile := fm.InputFile()
@@ -111,7 +111,7 @@ func cmdRun(fm *eval.Frame, opts cmdRunOpts, cmd string, args ...string) error {
 	m = m.Assoc("stderr", errs.String())
 	m = m.Assoc("stdin", ins.String())
 	m = m.Assoc("stdout", stdout.String())
-	out <- m
+	out.Put(m)
 	return nil
 }
 

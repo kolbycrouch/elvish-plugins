@@ -24,7 +24,7 @@ func createCache() *ristretto.Cache {
 
 func memoize(fm *eval.Frame, fn eval.Callable, args ...interface{}) error {
 	clos := reflect.ValueOf(fn).Elem()
-	out := fm.OutputChan()
+	out := fm.ValueOutput()
 	// TODO: Possibly change to something more sophisticated than concating ...interface{}.
 	// this is possibly very inefficient.
 	var argstring string
@@ -49,12 +49,12 @@ func memoize(fm *eval.Frame, fn eval.Callable, args ...interface{}) error {
 		memoCache.Set(ns+argstring, caps, 1)
 		memoCache.Wait()
 		for _, i := range caps {
-			out <- i
+			out.Put(i)
 		}
 		// We did find the memo. Send the values over `out`.
 	} else {
 		for _, i := range val.([]interface{}) {
-			out <- i
+			out.Put(i)
 		}
 	}
 	return nil

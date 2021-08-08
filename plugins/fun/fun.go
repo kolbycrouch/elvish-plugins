@@ -10,7 +10,7 @@ import (
 
 func mapFn(fm *eval.Frame, fn eval.Callable, cont interface{}) error {
     var newcont interface{}
-    out := fm.OutputChan()
+    out := fm.ValueOutput()
     clos := reflect.ValueOf(fn).Elem()
     err := errors.New("HI")
     switch t := cont.(type) {

@@ -6,10 +6,10 @@ import (
 )
 
 func fieldsStruct(fm *eval.Frame, val interface{}) {
-  out := fm.OutputChan()
+  out := fm.ValueOutput()
   new := reflect.ValueOf(val).Elem()
   for i:=0;i < new.NumField();i++ {
-    out <- new.Type().Field(i).Name
+    out.Put(new.Type().Field(i).Name)
   }
 }
 
