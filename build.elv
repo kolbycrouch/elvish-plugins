@@ -67,6 +67,9 @@ fn -build-plugins {
     if (or (eq $i 'compress') (eq $opts[plugins] 'all')) {
       go get github.com/klauspost/compress/zstd
     }
+    if (or (eq $i 'memo') (eq $opts[plugins] 'all')) {
+      go get github.com/dgraph-io/ristretto
+    }
     if (or (eq $i 'glib') (eq $opts[plugins] 'all')) {
       go get github.com/gotk3/gotk3/glib
       go get github.com/gotk3/gotk3/gtk
@@ -96,4 +99,4 @@ echo "Done building elvish."
 echo "Building Plugins: "(str:join ' ' (-chosen-plugins))
 -build-plugins
 echo "Done building plugins."
--clean-plugins
+#-clean-plugins

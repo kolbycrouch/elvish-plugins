@@ -49,7 +49,7 @@ func zstdCompress(fm *eval.Frame, input interface{}) {
     return strings.NewReader("")
   }()
   buf := new(bytes.Buffer)
-  enc, _ := zstd.NewWriter(buf)  
+  enc, _ := zstd.NewWriter(buf)
   _, _ = io.Copy(enc, val)
   enc.Close()
   out := fm.OutputFile()
