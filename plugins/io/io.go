@@ -7,13 +7,12 @@ import (
 )
 
 func Scan(fm *eval.Frame) string {
-   scanner := bufio.NewScanner(os.Stdin)
-   scanner.Scan()
-   text := scanner.Text()
-   return text
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	text := scanner.Text()
+	return text
 }
 
-var Ns = eval.NsBuilder{
-}.AddGoFns("io:", map[string]interface{}{
-  "scan" : Scan,
+var Ns = eval.NsBuilder{}.AddGoFns("io:", map[string]interface{}{
+	"scan": Scan,
 }).Ns()
